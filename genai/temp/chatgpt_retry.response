@@ -1,0 +1,86 @@
+{
+    "models": [
+        {
+            "classname": "Customer",
+            "code": "class Customer(Base):\n    \"\"\"description: Table representing pet shop customers.\"\"\"\n    __tablename__ = 'customer'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    email = Column(String, unique=True)\n    phone = Column(String)\n    address = Column(String)\n    balance = Column(Integer)",
+            "description": "Table representing pet shop customers.",
+            "name": "Customer"
+        },
+        {
+            "classname": "Pet",
+            "code": "class Pet(Base):\n    \"\"\"description: Table representing pets managed by the pet shop.\"\"\"\n    __tablename__ = 'pet'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    species = Column(String, nullable=False)\n    breed = Column(String)\n    price = Column(Integer)\n    owner_id = Column(Integer, ForeignKey('customer.id'))",
+            "description": "Table representing pets managed by the pet shop.",
+            "name": "Pet"
+        },
+        {
+            "classname": "Order",
+            "code": "class Order(Base):\n    \"\"\"description: Table representing pet purchase orders.\"\"\"\n    __tablename__ = 'order'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    date_ordered = Column(DateTime, default=datetime.utcnow)\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    amount_total = Column(Integer)",
+            "description": "Table representing pet purchase orders.",
+            "name": "Order"
+        },
+        {
+            "classname": "OrderItem",
+            "code": "class OrderItem(Base):\n    \"\"\"description: Table representing items within an order.\"\"\"\n    __tablename__ = 'order_item'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    order_id = Column(Integer, ForeignKey('order.id'))\n    pet_id = Column(Integer, ForeignKey('pet.id'))\n    quantity = Column(Integer, nullable=False)\n    amount = Column(Integer)",
+            "description": "Table representing items within an order.",
+            "name": "OrderItem"
+        },
+        {
+            "classname": "Supplier",
+            "code": "class Supplier(Base):\n    \"\"\"description: Table representing suppliers of pets.\"\"\"\n    __tablename__ = 'supplier'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    contact_email = Column(String)\n    phone = Column(String)",
+            "description": "Table representing suppliers of pets.",
+            "name": "Supplier"
+        },
+        {
+            "classname": "Stock",
+            "code": "class Stock(Base):\n    \"\"\"description: Table representing stock details of pets in the shop.\"\"\"\n    __tablename__ = 'stock'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    pet_id = Column(Integer, ForeignKey('pet.id'))\n    supplier_id = Column(Integer, ForeignKey('supplier.id'))\n    quantity = Column(Integer)\n    last_restocked = Column(Date)",
+            "description": "Table representing stock details of pets in the shop.",
+            "name": "Stock"
+        },
+        {
+            "classname": "Attendance",
+            "code": "class Attendance(Base):\n    \"\"\"description: Table representing attendance of customers for events.\"\"\"\n    __tablename__ = 'attendance'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    event_id = Column(Integer, ForeignKey('event.id'))\n    customer_id = Column(Integer, ForeignKey('customer.id'))",
+            "description": "Table representing attendance of customers for events.",
+            "name": "Attendance"
+        },
+        {
+            "classname": "Event",
+            "code": "class Event(Base):\n    \"\"\"description: Table representing events hosted by the pet shop.\"\"\"\n    __tablename__ = 'event'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    date = Column(Date)\n    location = Column(String)",
+            "description": "Table representing events hosted by the pet shop.",
+            "name": "Event"
+        },
+        {
+            "classname": "Staff",
+            "code": "class Staff(Base):\n    \"\"\"description: Table representing staff members of the pet shop.\"\"\"\n    __tablename__ = 'staff'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    name = Column(String, nullable=False)\n    role = Column(String)\n    hire_date = Column(Date)\n    salary = Column(Integer)",
+            "description": "Table representing staff members of the pet shop.",
+            "name": "Staff"
+        },
+        {
+            "classname": "Schedule",
+            "code": "class Schedule(Base):\n    \"\"\"description: Table representing work schedules for staff members.\"\"\"\n    __tablename__ = 'schedule'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    staff_id = Column(Integer, ForeignKey('staff.id'))\n    shift_date = Column(Date)\n    start_time = Column(DateTime)\n    end_time = Column(DateTime)",
+            "description": "Table representing work schedules for staff members.",
+            "name": "Schedule"
+        },
+        {
+            "classname": "Appointment",
+            "code": "class Appointment(Base):\n    \"\"\"description: Table representing appointments for pet grooming or veterinary visits.\"\"\"\n    __tablename__ = 'appointment'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    pet_id = Column(Integer, ForeignKey('pet.id'))\n    appointment_date = Column(Date)\n    service_type = Column(String)",
+            "description": "Table representing appointments for pet grooming or veterinary visits.",
+            "name": "Appointment"
+        },
+        {
+            "classname": "Feedback",
+            "code": "class Feedback(Base):\n    \"\"\"description: Table representing feedback from customers regarding services.\"\"\"\n    __tablename__ = 'feedback'\n\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    customer_id = Column(Integer, ForeignKey('customer.id'))\n    staff_id = Column(Integer, ForeignKey('staff.id'))\n    date_submitted = Column(Date)\n    comments = Column(String)",
+            "description": "Table representing feedback from customers regarding services.",
+            "name": "Feedback"
+        }
+    ],
+    "rules": [
+        {
+            "name": "Order Total Sum",
+            "description": "Calculate total amounts within an order.",
+            "use_case": "The Order amount_total should be the sum of related OrderItems.",
+            "code": "Rule.sum(derive=Order.amount_total, as_sum_of=OrderItem.amount)"
+        }
+    ],
+    "test_data": "# Test Data for Customer\ncustomer1 = Customer(name='Alice Smith', email='alice@example.com', phone='555-0101', address='123 Elm St', balance=0)\ncustomer2 = Customer(name='Bob Jones', email='bob@example.com', phone='555-0102', address='456 Oak St', balance=0)\ncustomer3 = Customer(name='Eve Taylor', email='eve@example.com', phone='555-0103', address='789 Pine St', balance=0)\ncustomer4 = Customer(name='Charlie Brown', email='charlie@example.com', phone='555-0104', address='101 Birch St', balance=0)\n\n# Test Data for Pet\npet1 = Pet(name='Bella', species='Dog', breed='Beagle', price=250, owner_id=customer1.id)\npet2 = Pet(name='Max', species='Cat', breed='Siamese', price=150, owner_id=customer2.id)\npet3 = Pet(name='Charlie', species='Bird', breed='Parrot', price=300, owner_id=None)\npet4 = Pet(name='Molly', species='Fish', breed='Goldfish', price=20, owner_id=None)\n\n# Test Data for Order\norder1 = Order(date_ordered=date(2023, 1, 10), customer_id=customer1.id, amount_total=300)\norder2 = Order(date_ordered=date(2023, 2, 15), customer_id=customer2.id, amount_total=150)\norder3 = Order(date_ordered=date(2023, 3, 20), customer_id=customer3.id, amount_total=0)\norder4 = Order(date_ordered=date(2023, 4, 25), customer_id=customer4.id, amount_total=20)\n\n# Test Data for OrderItem\norder_item1 = OrderItem(order_id=order1.id, pet_id=pet1.id, quantity=1, amount=250)\norder_item2 = OrderItem(order_id=order2.id, pet_id=pet2.id, quantity=1, amount=150)\norder_item3 = OrderItem(order_id=order3.id, pet_id=pet3.id, quantity=0, amount=0)\norder_item4 = OrderItem(order_id=order4.id, pet_id=pet4.id, quantity=1, amount=20)\n\n# Test Data for Supplier\nsupplier1 = Supplier(name='Happy Pets', contact_email='info@happypets.com', phone='555-0201')\nsupplier2 = Supplier(name='Animal House', contact_email='info@animalhouse.com', phone='555-0202')\nsupplier3 = Supplier(name='Pet World', contact_email='info@petworld.com', phone='555-0203')\nsupplier4 = Supplier(name='Tropical Fish Inc', contact_email='info@tropicalfish.com', phone='555-0204')\n\n# Test Data for Stock\nstock1 = Stock(pet_id=pet1.id, supplier_id=supplier1.id, quantity=10, last_restocked=date(2023, 1, 1))\nstock2 = Stock(pet_id=pet2.id, supplier_id=supplier2.id, quantity=5, last_restocked=date(2023, 2, 1))\nstock3 = Stock(pet_id=pet3.id, supplier_id=supplier3.id, quantity=8, last_restocked=date(2023, 3, 1))\nstock4 = Stock(pet_id=pet4.id, supplier_id=supplier4.id, quantity=15, last_restocked=date(2023, 4, 1))\n\n# Test Data for Attendance\nattendance1 = Attendance(event_id=None, customer_id=customer1.id)\nattendance2 = Attendance(event_id=None, customer_id=customer2.id)\nattendance3 = Attendance(event_id=None, customer_id=customer3.id)\nattendance4 = Attendance(event_id=None, customer_id=customer4.id)\n\n# Test Data for Event\nevent1 = Event(name='Adoption Day', date=date(2023, 5, 20), location='Community Hall')\nevent2 = Event(name='Pet Parade', date=date(2023, 6, 25), location='Downtown Square')\nevent3 = Event(name='Vet Check-up', date=date(2023, 7, 10), location='Pet Shop Clinic')\nevent4 = Event(name='Grooming Workshop', date=date(2023, 8, 15), location='Main Store')\n\n# Test Data for Staff\nstaff1 = Staff(name='John Doe', role='Manager', hire_date=date(2021, 1, 10), salary=40000)\nstaff2 = Staff(name='Jane Smith', role='Groomer', hire_date=date(2022, 5, 15), salary=30000)\nstaff3 = Staff(name='Emily Davis', role='Veterinarian', hire_date=date(2023, 2, 20), salary=50000)\nstaff4 = Staff(name='Tom Brown', role='Cashier', hire_date=date(2023, 6, 25), salary=25000)\n\n# Test Data for Schedule\nschedule1 = Schedule(staff_id=staff1.id, shift_date=date(2023, 9, 20), start_time=datetime(2023, 9, 20, 9, 0), end_time=datetime(2023, 9, 20, 17, 0))\nschedule2 = Schedule(staff_id=staff2.id, shift_date=date(2023, 9, 21), start_time=datetime(2023, 9, 21, 9, 0), end_time=datetime(2023, 9, 21, 17, 0))\nschedule3 = Schedule(staff_id=staff3.id, shift_date=date(2023, 9, 22), start_time=datetime(2023, 9, 22, 9, 0), end_time=datetime(2023, 9, 22, 17, 0))\nschedule4 = Schedule(staff_id=staff4.id, shift_date=date(2023, 9, 23), start_time=datetime(2023, 9, 23, 9, 0), end_time=datetime(2023, 9, 23, 17, 0))\n\n# Test Data for Appointment\nappointment1 = Appointment(customer_id=customer1.id, pet_id=pet1.id, appointment_date=date(2023, 10, 5), service_type='Grooming')\napppointment2 = Appointment(customer_id=customer2.id, pet_id=pet2.id, appointment_date=date(2023, 10, 6), service_type='Vet Check-up')\nappointment3 = Appointment(customer_id=customer3.id, pet_id=pet3.id, appointment_date=date(2023, 10, 7), service_type='Adoption')\nappointment4 = Appointment(customer_id=customer4.id, pet_id=None, appointment_date=date(2023, 10, 8), service_type='Consultation')\n\n# Test Data for Feedback\nfeedback1 = Feedback(customer_id=customer1.id, staff_id=staff1.id, date_submitted=date(2023, 11, 5), comments='Great service, thank you!')\nfeedback2 = Feedback(customer_id=customer2.id, staff_id=staff2.id, date_submitted=date(2023, 11, 6), comments='Excellent grooming!')\nfeedback3 = Feedback(customer_id=customer3.id, staff_id=staff3.id, date_submitted=date(2023, 11, 7), comments='Very knowledgeable vet.')\nfeedback4 = Feedback(customer_id=customer4.id, staff_id=staff4.id, date_submitted=date(2023, 11, 8), comments='Fast checkout.')",
+    "name": "Pet Shop Management System"
+}

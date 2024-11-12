@@ -1,0 +1,53 @@
+<o-form-layout-manager attr="Stock" mode="tab" title="STOCK">
+    <div fxFill fxLayout="column" fxLayoutAlign="start">
+        <o-table 
+            attr="StockTable" 
+            service="Stock" 
+            entity="Stock" 
+            title="STOCK"
+            keys="id"
+            columns="id;pet_id;supplier_id;quantity;last_restocked" 
+            header-actions="R;D"
+            visible-columns="id;pet_id;supplier_id;quantity;last_restocked"  
+            sort-columns="id" 
+            query-rows="20" 
+            quick-filter="yes"
+            row-height="medium" 
+            select-all-checkbox="true" 
+            pageable="yes"  
+            auto-adjust="true" 
+            virtual-scroll="yes" 
+            edition-mode="dblclick"
+            horizontal-scroll="yes"
+            show-title="yes"
+            export-button="yes">
+            
+            <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-table-column attr="pet_id" title="pet_id">
+    <o-table-cell-renderer-service attr="pet_id" 
+        service="Pet" entity="PetType" columns="id;name"
+        parent-keys="id:pet_id"
+        value-column="name" keys="pet_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column attr="supplier_id" title="supplier_id">
+    <o-table-cell-renderer-service attr="supplier_id" 
+        service="Supplier" entity="SupplierType" columns="id;name"
+        parent-keys="id:supplier_id"
+        value-column="name" keys="supplier_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column #quantity attr="quantity" title="quantity" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-date-input #last_restocked attr="last_restocked" type="date" label="last_restocked" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            
+            <o-table-context-menu></o-table-context-menu>
+            <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
+        </o-table>
+    </div>
+</o-form-layout-manager>

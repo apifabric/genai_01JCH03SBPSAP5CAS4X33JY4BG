@@ -1,0 +1,365 @@
+about:
+  date: November 12, 2024 20:13:53
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 13
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Appointment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: pet_id
+    - name: appointment_date
+      type: DATE
+    - name: service_type
+    description: Table representing appointments for pet grooming or veterinary visits.
+    info_list: Table representing appointments for pet grooming or veterinary visits.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - pet_id
+      name: pet
+      resource: Pet
+    type: Appointment
+    user_key: id
+  Attendance:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: event_id
+    description: Table representing attendance of customers for events.
+    info_list: Table representing attendance of customers for events.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - event_id
+      name: event
+      resource: Event
+    type: Attendance
+    user_key: id
+  Customer:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: email
+    - name: phone
+    - name: address
+    - name: balance
+    - name: id
+    description: Table representing pet shop customers.
+    info_list: Table representing pet shop customers.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: AppointmentList
+      resource: Appointment
+    - direction: tomany
+      fks:
+      - customer_id
+      name: AttendanceList
+      resource: Attendance
+    - direction: tomany
+      fks:
+      - customer_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - customer_id
+      name: OrderList
+      resource: Order
+    - direction: tomany
+      fks:
+      - owner_id
+      name: PetList
+      resource: Pet
+    type: Customer
+    user_key: name
+  Event:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: date
+      type: DATE
+    - name: location
+    - name: id
+    description: Table representing events hosted by the pet shop.
+    info_list: Table representing events hosted by the pet shop.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - event_id
+      name: AttendanceList
+      resource: Attendance
+    type: Event
+    user_key: name
+  Feedback:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: staff_id
+    - name: comments
+    - name: date_submitted
+      type: DATE
+    description: Table representing feedback from customers regarding services.
+    info_list: Table representing feedback from customers regarding services.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - staff_id
+      name: staff
+      resource: Staff
+    type: Feedback
+    user_key: id
+  Order:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+    - name: amount_total
+    - name: date_ordered
+      type: DATETIME
+    description: Table representing pet purchase orders.
+    info_list: Table representing pet purchase orders.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - order_id
+      name: OrderItemList
+      resource: OrderItem
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Order
+    user_key: id
+  OrderItem:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: order_id
+    - name: pet_id
+    - name: quantity
+      required: true
+    - name: amount
+    description: Table representing items within an order.
+    info_list: Table representing items within an order.
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    - direction: toone
+      fks:
+      - pet_id
+      name: pet
+      resource: Pet
+    type: OrderItem
+    user_key: id
+  Pet:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: owner_id
+    - name: species
+      required: true
+    - name: price
+    - name: id
+    - name: breed
+    description: Table representing pets managed by the pet shop.
+    info_list: Table representing pets managed by the pet shop.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - pet_id
+      name: AppointmentList
+      resource: Appointment
+    - direction: tomany
+      fks:
+      - pet_id
+      name: OrderItemList
+      resource: OrderItem
+    - direction: tomany
+      fks:
+      - pet_id
+      name: StockList
+      resource: Stock
+    - direction: toone
+      fks:
+      - owner_id
+      name: owner
+      resource: Customer
+    type: Pet
+    user_key: name
+  Schedule:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: staff_id
+    - name: shift_date
+      type: DATE
+    - name: start_time
+      type: DATETIME
+    - name: end_time
+      type: DATETIME
+    description: Table representing work schedules for staff members.
+    info_list: Table representing work schedules for staff members.
+    tab_groups:
+    - direction: toone
+      fks:
+      - staff_id
+      name: staff
+      resource: Staff
+    type: Schedule
+    user_key: id
+  Staff:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: role
+    - name: hire_date
+      type: DATE
+    - name: salary
+    - name: id
+    description: Table representing staff members of the pet shop.
+    info_list: Table representing staff members of the pet shop.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - staff_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - staff_id
+      name: ScheduleList
+      resource: Schedule
+    type: Staff
+    user_key: name
+  Stock:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: pet_id
+    - name: supplier_id
+    - name: quantity
+    - name: last_restocked
+      type: DATE
+    description: Table representing stock details of pets in the shop.
+    info_list: Table representing stock details of pets in the shop.
+    tab_groups:
+    - direction: toone
+      fks:
+      - pet_id
+      name: pet
+      resource: Pet
+    - direction: toone
+      fks:
+      - supplier_id
+      name: supplier
+      resource: Supplier
+    type: Stock
+    user_key: id
+  Supplier:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: contact_email
+    - name: phone
+    - name: id
+    description: Table representing suppliers of pets.
+    info_list: Table representing suppliers of pets.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - supplier_id
+      name: StockList
+      resource: Stock
+    type: Supplier
+    user_key: name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

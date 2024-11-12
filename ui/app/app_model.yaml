@@ -1,0 +1,551 @@
+about:
+  date: November 12, 2024 20:13:53
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+entities:
+  Appointment:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: customer_id
+      template: integer
+      type: INTEGER
+    - name: pet_id
+      template: integer
+      type: INTEGER
+    - name: appointment_date
+      type: DATE
+    - name: service_type
+      template: text
+      type: VARCHAR
+    description: Table representing appointments for pet grooming or veterinary visits.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table representing appointments for pet grooming or veterinary visits.
+    label: Appointment
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - pet_id
+      name: pet
+      resource: Pet
+    type: Appointment
+  Attendance:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: customer_id
+      template: integer
+      type: INTEGER
+    - name: event_id
+      template: integer
+      type: INTEGER
+    description: Table representing attendance of customers for events.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table representing attendance of customers for events.
+    label: Attendance
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - event_id
+      name: event
+      resource: Event
+    type: Attendance
+  Customer:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: email
+      template: text
+      type: VARCHAR
+    - name: phone
+      template: text
+      type: VARCHAR
+    - name: address
+      template: text
+      type: VARCHAR
+    - name: balance
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table representing pet shop customers.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table representing pet shop customers.
+    label: Customer
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: AppointmentList
+      resource: Appointment
+    - direction: tomany
+      fks:
+      - customer_id
+      name: AttendanceList
+      resource: Attendance
+    - direction: tomany
+      fks:
+      - customer_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - customer_id
+      name: OrderList
+      resource: Order
+    - direction: tomany
+      fks:
+      - owner_id
+      name: PetList
+      resource: Pet
+    type: Customer
+  Event:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: date
+      type: DATE
+    - name: location
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table representing events hosted by the pet shop.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table representing events hosted by the pet shop.
+    label: Event
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - event_id
+      name: AttendanceList
+      resource: Attendance
+    type: Event
+  Feedback:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: customer_id
+      template: integer
+      type: INTEGER
+    - name: staff_id
+      template: integer
+      type: INTEGER
+    - name: comments
+      template: text
+      type: VARCHAR
+    - name: date_submitted
+      type: DATE
+    description: Table representing feedback from customers regarding services.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table representing feedback from customers regarding services.
+    label: Feedback
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - staff_id
+      name: staff
+      resource: Staff
+    type: Feedback
+  Order:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: customer_id
+      template: integer
+      type: INTEGER
+    - name: amount_total
+      template: integer
+      type: INTEGER
+    - name: date_ordered
+      type: DATETIME
+    description: Table representing pet purchase orders.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table representing pet purchase orders.
+    label: Order
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - order_id
+      name: OrderItemList
+      resource: OrderItem
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Order
+  OrderItem:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: order_id
+      template: integer
+      type: INTEGER
+    - name: pet_id
+      template: integer
+      type: INTEGER
+    - name: quantity
+      required: true
+      template: integer
+      type: INTEGER
+    - name: amount
+      template: integer
+      type: INTEGER
+    description: Table representing items within an order.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table representing items within an order.
+    label: OrderItem
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    - direction: toone
+      fks:
+      - pet_id
+      name: pet
+      resource: Pet
+    type: OrderItem
+  Pet:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: owner_id
+      template: integer
+      type: INTEGER
+    - name: species
+      required: true
+      template: text
+      type: VARCHAR
+    - name: price
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    - name: breed
+      template: text
+      type: VARCHAR
+    description: Table representing pets managed by the pet shop.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table representing pets managed by the pet shop.
+    label: Pet
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - pet_id
+      name: AppointmentList
+      resource: Appointment
+    - direction: tomany
+      fks:
+      - pet_id
+      name: OrderItemList
+      resource: OrderItem
+    - direction: tomany
+      fks:
+      - pet_id
+      name: StockList
+      resource: Stock
+    - direction: toone
+      fks:
+      - owner_id
+      name: owner
+      resource: Customer
+    type: Pet
+  Schedule:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: staff_id
+      template: integer
+      type: INTEGER
+    - name: shift_date
+      type: DATE
+    - name: start_time
+      type: DATETIME
+    - name: end_time
+      type: DATETIME
+    description: Table representing work schedules for staff members.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table representing work schedules for staff members.
+    label: Schedule
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - staff_id
+      name: staff
+      resource: Staff
+    type: Schedule
+  Staff:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: role
+      template: text
+      type: VARCHAR
+    - name: hire_date
+      type: DATE
+    - name: salary
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table representing staff members of the pet shop.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table representing staff members of the pet shop.
+    label: Staff
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - staff_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - staff_id
+      name: ScheduleList
+      resource: Schedule
+    type: Staff
+  Stock:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: pet_id
+      template: integer
+      type: INTEGER
+    - name: supplier_id
+      template: integer
+      type: INTEGER
+    - name: quantity
+      template: integer
+      type: INTEGER
+    - name: last_restocked
+      type: DATE
+    description: Table representing stock details of pets in the shop.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Table representing stock details of pets in the shop.
+    label: Stock
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - pet_id
+      name: pet
+      resource: Pet
+    - direction: toone
+      fks:
+      - supplier_id
+      name: supplier
+      resource: Supplier
+    type: Stock
+  Supplier:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: contact_email
+      template: text
+      type: VARCHAR
+    - name: phone
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Table representing suppliers of pets.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Table representing suppliers of pets.
+    label: Supplier
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - supplier_id
+      name: StockList
+      resource: Stock
+    type: Supplier
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: false
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    mode: tab
+    pick_style: list
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: false

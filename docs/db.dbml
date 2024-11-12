@@ -1,0 +1,130 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Appointment: appointments for pet grooming or veterinary visits.
+Customer: pet shop customers.
+Pet: pets managed by the pet shop.
+Attendance: attendance of customers for events.
+Event: events hosted by the pet shop.
+Feedback: feedback from customers regarding services.
+Staff: staff members of the pet shop.
+Order: pet purchase orders.
+OrderItem: items within an order.
+Schedule: work schedules for staff members.
+Stock: stock details of pets in the shop.
+Supplier: suppliers of pets.
+'''
+}
+
+Table Appointment {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    pet_id INTEGER 
+    appointment_date DATE 
+    service_type VARCHAR 
+    }
+
+Table Customer {
+    id INTEGER [primary key]
+    name VARCHAR 
+    email VARCHAR 
+    phone VARCHAR 
+    address VARCHAR 
+    balance INTEGER 
+    }
+
+Table Pet {
+    id INTEGER [primary key]
+    name VARCHAR 
+    species VARCHAR 
+    breed VARCHAR 
+    price INTEGER 
+    owner_id INTEGER 
+    }
+
+Table Attendance {
+    id INTEGER [primary key]
+    event_id INTEGER 
+    customer_id INTEGER 
+    }
+
+Table Event {
+    id INTEGER [primary key]
+    name VARCHAR 
+    date DATE 
+    location VARCHAR 
+    }
+
+Table Feedback {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    staff_id INTEGER 
+    date_submitted DATE 
+    comments VARCHAR 
+    }
+
+Table Staff {
+    id INTEGER [primary key]
+    name VARCHAR 
+    role VARCHAR 
+    hire_date DATE 
+    salary INTEGER 
+    }
+
+Table Order {
+    id INTEGER [primary key]
+    date_ordered DATETIME 
+    customer_id INTEGER 
+    amount_total INTEGER 
+    }
+
+Table OrderItem {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    pet_id INTEGER 
+    quantity INTEGER 
+    amount INTEGER 
+    }
+
+Table Schedule {
+    id INTEGER [primary key]
+    staff_id INTEGER 
+    shift_date DATE 
+    start_time DATETIME 
+    end_time DATETIME 
+    }
+
+Table Stock {
+    id INTEGER [primary key]
+    pet_id INTEGER 
+    supplier_id INTEGER 
+    quantity INTEGER 
+    last_restocked DATE 
+    }
+
+Table Supplier {
+    id INTEGER [primary key]
+    name VARCHAR 
+    contact_email VARCHAR 
+    phone VARCHAR 
+    }
+
+
+
+// Relationships
+    Ref: Appointment.(customer_id) < Customer.(id)
+    Ref: Appointment.(pet_id) < Pet.(id)
+    Ref: Pet.(owner_id) < Customer.(id)
+    Ref: Attendance.(customer_id) < Customer.(id)
+    Ref: Attendance.(event_id) < Event.(id)
+    Ref: Feedback.(customer_id) < Customer.(id)
+    Ref: Feedback.(staff_id) < Staff.(id)
+    Ref: Order.(customer_id) < Customer.(id)
+    Ref: OrderItem.(order_id) < Order.(id)
+    Ref: OrderItem.(pet_id) < Pet.(id)
+    Ref: Schedule.(staff_id) < Staff.(id)
+    Ref: Stock.(pet_id) < Pet.(id)
+    Ref: Stock.(supplier_id) < Supplier.(id)

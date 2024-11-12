@@ -1,0 +1,46 @@
+<o-form-layout-manager attr="Schedule" mode="tab" title="SCHEDULE">
+    <div fxFill fxLayout="column" fxLayoutAlign="start">
+        <o-table 
+            attr="ScheduleTable" 
+            service="Schedule" 
+            entity="Schedule" 
+            title="SCHEDULE"
+            keys="id"
+            columns="id;staff_id;shift_date;start_time;end_time" 
+            header-actions="R;D"
+            visible-columns="id;staff_id;shift_date;start_time;end_time"  
+            sort-columns="id" 
+            query-rows="20" 
+            quick-filter="yes"
+            row-height="medium" 
+            select-all-checkbox="true" 
+            pageable="yes"  
+            auto-adjust="true" 
+            virtual-scroll="yes" 
+            edition-mode="dblclick"
+            horizontal-scroll="yes"
+            show-title="yes"
+            export-button="yes">
+            
+            <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-table-column attr="staff_id" title="staff_id">
+    <o-table-cell-renderer-service attr="staff_id" 
+        service="Staff" entity="StaffType" columns="id;name"
+        parent-keys="id:staff_id"
+        value-column="name" keys="staff_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-date-input #shift_date attr="shift_date" type="date" label="shift_date" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            
+            <o-table-column #start_time attr="start_time" title="start_time" editable="no" required="no" content-align="left"></o-table-column>
+            
+            <o-table-column #end_time attr="end_time" title="end_time" editable="no" required="no" content-align="left"></o-table-column>
+            
+            <o-table-context-menu></o-table-context-menu>
+            <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
+        </o-table>
+    </div>
+</o-form-layout-manager>

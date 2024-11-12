@@ -1,0 +1,143 @@
+<div class="container">
+<o-form-container breadcrumb="yes" breadcrumb-label-columns="name" breadcrumb-separator=", " class="fill-form">
+      <o-form #form attr="Staff_form_edit" 
+        service="Staff" 
+        entity="Staff" 
+        fxLayout="column" 
+        show-header="yes" 
+        header-actions="R;I;U;D"
+        #oDetailForm keys="id" 
+        keys-sql-types="INTEGER" 
+        show-header-navigation="yes"
+        (onDataLoaded)="onDataLoaded($event)">
+
+  <o-row attr="row1" layout-align="start stretch">
+    <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex fxLayoutGap="14px">
+      
+      <o-text-input #name attr="name" label=" name*" enabled="yes" required="yes" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-text-input #role attr="role" label="role" enabled="yes" required="no" fxFlex="20%" class="form-field"></o-text-input>
+      
+      <o-date-input #hire_date attr="hire_date" type="date" label="hire_date" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+      
+      <o-integer-input #salary attr="salary" label="salary" type="integer" editable="no" required="no" ></o-integer-input>
+      
+      <o-integer-input #id attr="id" label="id" type="integer" editable="no" required="no" ></o-integer-input>
+      
+    </div>
+  </o-row>
+      
+      <mat-tab-group fxFill>
+        
+        <mat-tab label="FEEDBACK-staff_id">
+    <div layout-padding>
+      <o-table 
+        attr="FeedbackTable" 
+        service="Feedback" 
+        entity="Feedback" 
+        keys="id"
+        parent-keys="staff_id:id"
+        columns="id;customer_id;staff_id;comments;date_submitted"  
+        horizontal-scroll="yes"
+        detail-form-route="Feedback" 
+        edit-form-route="Feedback"
+        visible-columns="id;customer_id;staff_id;comments;date_submitted"  
+        sort-columns="id" 
+        query-rows="25" 
+        quick-filter="yes"
+        row-height="medium" 
+        select-all-checkbox="true" 
+        pageable="yes"  
+        auto-adjust="true" 
+        virtual-scroll="yes" 
+        insert-button="yes" 
+        delete-button="yes" 
+        fixed-header="true" 
+        class="vertical-padding-8"
+        edition-mode="dblclick" 
+        horizontal-scroll="yes" class="fill-form">
+        
+          <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+        
+          <o-table-column attr="customer_id" title="customer_id">
+    <o-table-cell-renderer-service attr="customer_id" 
+        service="Customer" entity="CustomerType" columns="id;name"
+        parent-keys="id:customer_id"
+        value-column="name" keys="customer_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+        
+          <o-table-column attr="staff_id" title="staff_id">
+    <o-table-cell-renderer-service attr="staff_id" 
+        service="Staff" entity="StaffType" columns="id;name"
+        parent-keys="id:staff_id"
+        value-column="name" keys="staff_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+        
+          <o-table-column #comments attr="comments" title="comments" editable="no" required="no" content-align="left"></o-table-column>
+        
+          <o-date-input #date_submitted attr="date_submitted" type="date" label="date_submitted" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+        
+        <o-table-paginator page-size-options="25;50;100"></o-table-paginator>
+      </o-table>
+    </div>
+</mat-tab>
+        
+        <mat-tab label="SCHEDULE-staff_id">
+    <div layout-padding>
+      <o-table 
+        attr="ScheduleTable" 
+        service="Schedule" 
+        entity="Schedule" 
+        keys="id"
+        parent-keys="staff_id:id"
+        columns="id;staff_id;shift_date;start_time;end_time"  
+        horizontal-scroll="yes"
+        detail-form-route="Schedule" 
+        edit-form-route="Schedule"
+        visible-columns="id;staff_id;shift_date;start_time;end_time"  
+        sort-columns="id" 
+        query-rows="25" 
+        quick-filter="yes"
+        row-height="medium" 
+        select-all-checkbox="true" 
+        pageable="yes"  
+        auto-adjust="true" 
+        virtual-scroll="yes" 
+        insert-button="yes" 
+        delete-button="yes" 
+        fixed-header="true" 
+        class="vertical-padding-8"
+        edition-mode="dblclick" 
+        horizontal-scroll="yes" class="fill-form">
+        
+          <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+        
+          <o-table-column attr="staff_id" title="staff_id">
+    <o-table-cell-renderer-service attr="staff_id" 
+        service="Staff" entity="StaffType" columns="id;name"
+        parent-keys="id:staff_id"
+        value-column="name" keys="staff_id"
+        visible-columns="name" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+        
+          <o-date-input #shift_date attr="shift_date" type="date" label="shift_date" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+        
+          <o-table-column #start_time attr="start_time" title="start_time" editable="no" required="no" content-align="left"></o-table-column>
+        
+          <o-table-column #end_time attr="end_time" title="end_time" editable="no" required="no" content-align="left"></o-table-column>
+        
+        <o-table-paginator page-size-options="25;50;100"></o-table-paginator>
+      </o-table>
+    </div>
+</mat-tab>
+        
+      </mat-tab-group>
+      
+    </o-form>
+  </o-form-container>
+</div>
